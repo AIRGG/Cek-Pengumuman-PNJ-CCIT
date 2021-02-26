@@ -47,15 +47,28 @@ class CekPengumuman():
 		html = self.parseHttp()
 		if len(html) > 0:
 
-			if wht == "ccit": # Untuk CCIT
+			if wht in ["ccit", "ccit-mhs"]: # Untuk CCIT
 				# url = "https://ccit.eng.ui.ac.id/"
-				warta = html.find("div", {'id':'event_star_posts_col-3'})
-				header = warta.find_all("h3", {'class':'entry-title'})
-				for x in reversed(header):
-					geta = x.text
-					ahref = x.find("a")['href']
-					print(f"[INFO] {geta}")
-					print(f"[LINK] {ahref}", "\n----------------")
+				if wht == "ccit":
+					warta = html.find("div", {'id':'event_star_posts_col-3'})
+					header = warta.find_all("h3", {'class':'entry-title'})
+					for x in reversed(header):
+						geta = x.text
+						ahref = x.find("a")['href']
+						print(f"[INFO] {geta}")
+						print(f"[LINK] {ahref}", "\n----------------")
+				
+				elif wht == "ccit-mhs":
+					article = html.find_all("article")
+					for x in article:
+						tmph = x.find("h2", {'class':'entry-title'}).find("a")
+						title = tmph.text
+						ahref = tmph['href']
+						timepublish = x.find_all("time")[0].text
+
+						print(f"[INFO] {title}")
+						print(f"[DATE] {timepublish}")
+						print(f"[LINK] {ahref}", "\n----------------")
 
 			elif wht in ["pnj", "pnjnews"]: # Untuk PNJ
 				# baseUrl = "http://pnj.ac.id/"
@@ -102,6 +115,9 @@ class CekPengumuman():
 if __name__ == "__main__":
 	ccit = CekPengumuman("https://ccit.eng.ui.ac.id/")
 	ccit.getPengumuman("ccit")
+
+	ccitmhs = CekPengumuman("https://ccit.eng.ui.ac.id/category/pengumuman-untuk-siswa/page/1/")
+	ccitmhs.getPengumuman("ccit-mhs")
 
 	pnj = CekPengumuman("http://pnj.ac.id/")
 	pnj.getPengumuman("pnj")
