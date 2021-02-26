@@ -60,7 +60,7 @@ class CekPengumuman():
 				
 				elif wht == "ccit-mhs":
 					article = html.find_all("article")
-					for x in article:
+					for x in reversed(article):
 						tmph = x.find("h2", {'class':'entry-title'}).find("a")
 						title = tmph.text
 						ahref = tmph['href']
